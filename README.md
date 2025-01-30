@@ -192,7 +192,7 @@ clarinet test tests/did-credit-system_test.ts
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contact
-- Project Maintainer: Adigun Rasheed Olayinka
+- Project Maintainer: Adigun Rasheed
 - Email: adigun_olami99@yahoo.com
 
 ## Acknowledgments
