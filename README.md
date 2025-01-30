@@ -1,119 +1,195 @@
 # Reputation-Based Decentralized Identity Credit Scoring System
 
 ## Overview
-A decentralized identity (DID) system built on the Stacks blockchain that calculates and manages credit scores based on users' on-chain activity, transaction history, and reputation. This system enables users to maintain sovereignty over their financial identity while providing verifiable creditworthiness data to potential lenders and business partners.
+A sophisticated decentralized identity (DID) system built on the Stacks blockchain that provides a comprehensive credit scoring mechanism based on on-chain activities, transaction patterns, and verified reputation. The system implements privacy-preserving features while maintaining transparency and trust in credit assessment.
 
-## Features
-- Decentralized credit score calculation and storage
-- Privacy-preserving identity verification
-- On-chain transaction history tracking
-- Selective disclosure of credit information
-- Business integration endpoints
+## Core Features
+
+### Identity Management
+- Decentralized user identity creation and management
+- Multi-level verification system
+- Privacy controls with selective disclosure
+- Customizable privacy levels (Public, Limited, Private)
+
+### Credit Scoring
+- Dynamic score calculation based on multiple factors:
+  - Transaction success ratio
+  - Volume-weighted scoring
+  - Activity recency
+  - Transaction frequency
+- Score range: 300-850 (industry standard)
+- Automatic score adjustments based on on-chain behavior
+
+### Business Integration
+- Tiered access system for businesses
+- Verification process for business entities
+- Customizable data access levels
+- Secure API endpoints for integration
+
+### Privacy Features
+- Three-tier privacy system
+  - Public: Basic score visibility
+  - Limited: Partial data access
+  - Private: Full access control
+- Selective disclosure mechanisms
+- Business authorization controls
 
 ## Technical Architecture
 
-### Smart Contracts
-The system consists of the following core components:
+### Smart Contract Components
 
-1. **UserScores Map**
-   - Stores user credit scores
-   - Tracks verification status
-   - Maintains update history
+#### Core Maps
+```clarity
+UserScores Map:
+- credit-score: uint
+- last-updated: uint
+- transaction-count: uint
+- verification-status: bool
+- privacy-level: uint
 
-2. **UserTransactions Map**
-   - Records transaction outcomes
-   - Tracks transaction volumes
-   - Maintains success/failure ratios
+UserTransactions Map:
+- successful-txs: uint
+- failed-txs: uint
+- total-volume: uint
+- avg-transaction-size: uint
+- last-transaction-time: uint
 
-### Key Functions
-
-#### Public Functions
-- `initialize-user`: Creates new user profile with base score
-- `update-transaction-history`: Updates user transaction records
-- `get-credit-score`: Retrieves user credit score
-- `get-transaction-history`: Fetches transaction history
-
-#### Administrative Functions
-- `verify-user`: Verifies user identity status
-
-## Getting Started
-
-### Prerequisites
-- Stacks blockchain environment
-- Clarity CLI tools
-- Rust development environment
-
-### Installation
-1. Clone the repository:
-```bash
-git clone [repository-url]
-cd reputation-did-system
+AuthorizedBusinesses Map:
+- access-level: uint
+- verification-status: bool
 ```
 
-2. Install dependencies:
+#### Key Functions
+
+##### User Management
+```clarity
+(define-public (initialize-user (privacy-level uint))
+(define-public (update-privacy-level (new-level uint))
+(define-public (update-transaction-history (success bool) (volume uint))
+```
+
+##### Business Integration
+```clarity
+(define-public (register-business (access-level uint))
+(define-public (verify-business (business principal))
+```
+
+##### Score Calculation
+```clarity
+(define-private (calculate-transaction-score (user-stats {...}))
+(define-private (update-credit-score (user principal) (transaction-score uint))
+```
+
+### Security Measures
+- Owner-only administrative functions
+- Privacy-aware data access controls
+- Input validation and error handling
+- Secure score calculation mechanisms
+
+## Installation & Setup
+
+### Prerequisites
+- Clarinet 1.0.0 or higher
+- Stacks blockchain testnet/mainnet access
+- Hiro Wallet for contract deployment
+
+### Development Setup
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/did-credit-system.git
+cd did-credit-system
+```
+
+2. Install dependencies
 ```bash
 clarinet install
 ```
 
-3. Run tests:
+3. Run tests
 ```bash
 clarinet test
 ```
 
-### Deployment
-1. Configure your Stacks wallet
-2. Update deployment settings in `Clarinet.toml`
-3. Deploy using Clarinet:
+### Contract Deployment
+1. Configure deployment settings in `Clarinet.toml`
+```toml
+[contracts.did-credit-system]
+path = "contracts/did-credit-system.clar"
+```
+
+2. Deploy using Clarinet
 ```bash
-clarinet deploy
+clarinet deploy --network testnet
 ```
 
-## Usage
+## Usage Guide
 
-### Initializing a User Profile
+### For Users
+
+#### Initialize Profile
 ```clarity
-(contract-call? .credit-score-system initialize-user)
+(contract-call? .did-credit-system initialize-user u1)
 ```
 
-### Updating Transaction History
+#### Update Privacy Settings
 ```clarity
-(contract-call? .credit-score-system update-transaction-history true u1000)
+(contract-call? .did-credit-system update-privacy-level u2)
 ```
 
-### Checking Credit Score
+#### Record Transaction
 ```clarity
-(contract-call? .credit-score-system get-credit-score tx-sender)
+(contract-call? .did-credit-system update-transaction-history true u1000)
 ```
 
-## Security Considerations
-- All sensitive user data is stored on-chain in a privacy-preserving manner
-- Administrative functions are protected by ownership checks
-- Transaction history is immutable and verifiable
-- Score calculations are transparent and auditable
+### For Businesses
+
+#### Register Business
+```clarity
+(contract-call? .did-credit-system register-business u1)
+```
+
+#### Access User Score
+```clarity
+(contract-call? .did-credit-system get-credit-score user-principal tx-sender)
+```
 
 ## Development Roadmap
 
-### Phase 1 (Current)
-- Basic credit score system
+### Phase 1 (Completed)
+- Basic credit score implementation
 - Transaction tracking
-- User verification
+- User verification system
+
+### Phase 2 (Current)
+- Enhanced scoring algorithm
+- Privacy controls
+- Business integration
+- Extended transaction metrics
 
 ### Future Phases
-- Enhanced scoring algorithm
-- Privacy features
-- Business integration API
-- Mobile app integration
 - Cross-chain compatibility
+- Advanced analytics
+- Mobile app integration
+- Governance features
 
 ## Contributing
 1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+2. Create feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open Pull Request
+
+## Testing
+```bash
+# Run all tests
+clarinet test
+
+# Run specific test
+clarinet test tests/did-credit-system_test.ts
+```
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contact
 - Project Maintainer: Adigun Rasheed Olayinka
